@@ -12,9 +12,11 @@ J = 0;
 % ====================== YOUR CODE HERE ======================
 % Instructions: Compute the cost of a particular choice of theta
 %               You should set J to the cost.
+hyphotesis = X * theta;
+error = abs(y - hyphotesis);
+error_sqr = error.^2;
 
-
-
+J = 1/(2*m) * sum(error_sqr);
 
 
 % =========================================================================
