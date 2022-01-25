@@ -68,14 +68,6 @@ Theta2_grad = zeros(size(Theta2));
 eye_matrix = eye(num_labels);
 Y = eye_matrix(y,:);
 
-% The same than before but with for loop
-%eye_matrix = eye(num_labels);
-%Y = zeros(m, num_labels);
-
-%for i=1:m
- % Y(i, :)= eye_matrix(y(i), :);
-%end
-
 % Forward Propagation or Feedforward
 a1 = [ones(m, 1) X];
 z2 = a1 * Theta1';
@@ -91,20 +83,22 @@ p = sum(sum(Theta1(:, 2:end).^2, 2)) + sum(sum(Theta2(:, 2:end).^2, 2));
 % Calculate J | The Cost Function
 J = sum(sum((-Y) .* log(hypothesis) - (1-Y) .* log(1-hypothesis), 2)) / m + lambda * p / (2*m);
 
-% Calculate Sigmas
-sigma3 = hypothesis .* -Y;
-sigma2 = (sigma3 * Theta2) .* sigmoidGradient([ones(size(z2, 1), 1) z2]);
-sigma2 = sigma2(:, 2:end);
+% Calculate Small Deltas
+delta3 = a3 - Y;
+
+delta2 = (delta3 * Theta2(:, 2:end)) .* sigmoidGradient(z2);
 
 % Accumulate Gradients
-delta1 = (sigma2' * a1);
-delta2 = (sigma3' * a2);
+Delta1 = (delta2' * a1);
+Delta2 = (delta3' * a2);
 
 % Calculate Regularized Gradient
-p1 = (lambda/m) * [zeros(size(Theta1, 1), 1) Theta1(:, 2:end)];
-p2 = (lambda/m) * [zeros(size(Theta2, 1), 1) Theta2(:, 2:end)];
-Theta1_grad = delta1 ./ m + p1;
-Theta2_grad = delta2 ./ m + p2;
+
+Q1 = (lambda/m) * [zeros(size(Theta1, 1), 1) Theta1(:, 2:end)];
+Q2 = (lambda/m) * [zeros(size(Theta2, 1), 1) Theta2(:, 2:end)];
+
+Theta1_grad = Delta1 ./ m + Q1;
+Theta2_grad = Delta2 ./ m + Q2;
 
 % =========================================================================
 % Unroll gradients
