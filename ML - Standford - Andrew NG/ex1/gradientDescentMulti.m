@@ -17,16 +17,15 @@ for iter = 1:num_iters
     %       of the cost function (computeCostMulti) and gradient here.
     %
 
+    hypothesis = X * theta;
 
+    error = hypothesis - y;
 
+    thetaChange = alpha * (1/m) * X' * error;
 
+    theta = theta - thetaChange;
 
-
-
-
-
-
-
+    % The same as before
     % ============================================================
 
     % Save the cost J in every iteration    
